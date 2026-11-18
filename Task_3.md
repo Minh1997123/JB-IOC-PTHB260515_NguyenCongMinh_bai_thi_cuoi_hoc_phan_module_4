@@ -1,0 +1,5 @@
+1/ - Cơ chế Service Discovery: + Các service khi khởi động sẽ được đăng ký tự động lên trên service registry ở đây là Eureka Server. + Khi gọi dịch vụ thì api-gateway sẽ tự động truy cập vào Eureka Server để lấy danh sách các dịch vụ đang chạy. - Lý do Gateway không gọi trực tiếp IP/P/Port: + Tránh tình trạng hardcode vì trong môi trường phát triển và triển khi thì sẽ có lúc thay đổi ip nên dễ gây ra lỗi. + Có thể mở rộng về sau khi muốn thêm một bản sao hoặc của 1 service
+
+2/ - Xử dụng cân bằng tải (load balancing) + không hardcode đường dẫn đến dịch vụ mà dùng "lb://Tên-dich-vụ" để khi có lỗi hoặc quá tải thì sẽ chuyến được sang một bản sao của dịch vụ đó - tạo bản sao cho dịch vụ để có thể gánh tải cùng
+
+3/ - Cách hoạt động + OpenFeign: gọi trực tiếp http + Kafka : bắn sự kiện lên kafka topic , lắng nghe - Ưu điểm + OpenFeign : dễ dàng và đơn giản , biết kết quả ngay + Kafka : chịu tải cao , giảm phụ thuộc , tốc độ nhanh - Nhược điểm + OpenFeign : bị phụ thuộc , chậm , không hỗ trợ phương thức PAth, put + Kafka : phức tạp , kết quả ko được nhất quán vì bất đồng bộ
